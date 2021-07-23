@@ -8,6 +8,10 @@ const UniversidadSchema = mongoose.Schema({
     abreviacion:{
         type:String,
         required:true
+    },
+    creado:{
+        type:Date,
+        default:Date.now()
     }
 })
 

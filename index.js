@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 
 const universidad = require('./routes/Universidades');
+const carrera = require('./routes/Carreras');
+
 
 //Crear la conexion a la BD
 const conectarDB = require('./config/db');
@@ -15,6 +17,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 /* Seccion para las rutas*/
 app.use('/api/universidad',universidad());
+app.use('/api/carrera',carrera());
 
 //ruta para el home
 app.listen(3000,function(){
