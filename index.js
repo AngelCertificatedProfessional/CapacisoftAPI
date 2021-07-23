@@ -7,11 +7,8 @@ const universidad = require('./routes/Universidades');
 //Crear la conexion a la BD
 const conectarDB = require('./config/db');
 
-//Importar el modelo
-// require('./models/Proyectos')
-// db.sync()
-//     .then(() => console.log("conectado al servidor"))
-//     .catch(error => console.log(error));
+var cors = require('cors')
+app.use(cors())
 conectarDB();
 //habilitar body parser para ller datos del formulario
 app.use(express.json())
