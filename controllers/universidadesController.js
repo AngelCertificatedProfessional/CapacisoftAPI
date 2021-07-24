@@ -19,7 +19,7 @@ exports.createUniversidad =  async (req,res) =>{
 
 exports.listadoUniversidades = async (req,res) => {
     try{
-        const resultado = await Universidad.find({});
+        const resultado = await Universidad.find({},{'nombre':1,'abreviacion':1});
         return res.json({
             message: 'Envio de universidades',
             data:resultado
