@@ -1,9 +1,11 @@
 const Carrera = require('../models/Carrera')
+const Request = require('./requestController')
 
 exports.createCarrera =  async (req,res) =>{
     try{
         const carrera = new Carrera(req.body)
         const resultado = await carrera.save();
+        Request.crearRequest('createCarrera',JSON.stringify(req.body),200);
         return res.json({
             message: 'La carrera fue creada exitosamente',
             data:resultado
