@@ -7,7 +7,6 @@ const RequestSchema = mongoose.Schema({
     },
     request:{
         type:String,
-        required:true
     },
     estatus:{
         type:Number,
