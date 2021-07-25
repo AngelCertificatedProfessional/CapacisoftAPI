@@ -19,7 +19,15 @@ exports.createCarrera =  async (req,res) =>{
 
 exports.listadoCarreras = async (req,res) => {
     try{
-        const resultado = await Carrera.find({});
+        const resultado = await Carrera.aggregate([
+            {
+                $project:{
+                    nombreCarrera:1,
+                    nombreCompletoCoordinador:{ $concat: [ '$nombreCoordinador',' ', '$apellidoCoordinador' ] }
+                }
+            }
+        ]    
+        )
         return res.json({
             message: 'Envio de carreras',
             data:resultado
