@@ -1,11 +1,20 @@
 const Usuario = require('../models/Usuario')
 const Request = require('./requestController')
+const bcrypt = require('bcrypt-nodejs')
 
 exports.createUsuario =  async (req,res) =>{
     try{
+        if((await validaUsuario(req.body.usuario)) > 0) {
+            throw 'El usuario ya existe'
+        }
+
         const usuario = new Usuario(req.body)
+        //Hasheamos el password
+        usuario.contrasena = bcrypt.hashSync(usuario.contrasena,bcrypt.genSaltSync(10));
         const resultado = await usuario.save();
+
         Request.crearRequest('createUsuario',JSON.stringify(req.body),200);
+
         return res.json({
             message: 'El usuario fue creado exitosamente',
             data:resultado
@@ -55,6 +64,10 @@ exports.getUsuariobyId = async (req,res) => {
 
 exports.actualizarUsuario = async (req,res) => {
     try{
+
+        if((await validaUsuario(req.body.usuario,req.body._id)) > 0) {
+            throw 'El usuario ya existe'
+        }
         const usuario = await Usuario.findOne({'_id':req.body._id});
         usuario.usuario = req.body.usuario;
         usuario.contrasena = req.body.contrasena;
@@ -74,4 +87,14 @@ exports.actualizarUsuario = async (req,res) => {
             data: error
         });
     }
+}
+
+const validaUsuario = async (usuario,nId) => {
+
+    if(nId === undefined){
+        return (await Usuario.countDocuments({'usuario':usuario}));
+    }else{
+        return (await Usuario.countDocuments({'usuario':usuario,'_id':{'$ne':nId}}));
+    }
+
 }
