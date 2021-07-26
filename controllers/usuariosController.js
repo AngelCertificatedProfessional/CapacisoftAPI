@@ -97,6 +97,7 @@ exports.actualizarUsuario = async (req,res) => {
         usuario.contrasena = req.body.contrasena;
         usuario.nombre = req.body.nombre;
         usuario.apellido = req.body.apellido;
+        usuario.tipoUsuario = req.body.tipoUsuario;
         const resultado = await usuario.save();
         Request.crearRequest('actualizarUsuario',JSON.stringify(req.body),200);
         return res.json({
