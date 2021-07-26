@@ -30,7 +30,31 @@ exports.createUsuario =  async (req,res) =>{
 
 exports.listadoUsuario = async (req,res) => {
     try{
-        const resultado = await Usuario.find({},{'usuario':1});
+        const resultado = await Usuario.aggregate([
+            {
+                $lookup:
+                    {
+                    from: "tipoUsuario",
+                    localField: "tipoUsuario",
+                    foreignField: "codigo",
+                    as: "tipoUsuarios"
+                    }
+            },
+            {
+                $unwind:'$tipoUsuarios'
+            }
+            ,{
+                $project:{
+                    usuario:1,
+                    tipoUsuario:"$tipoUsuarios.tipoUsuario"
+                }
+            }
+        ]    
+        )
+        
+        
+        
+        Usuario.find({},{'usuario':1,'nombre':1,'tipoUsuario':1});
         Request.crearRequest('listadoUsuario','',200);
         return res.json({
             message: 'Envio de curso de cursos',

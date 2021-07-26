@@ -17,6 +17,10 @@ const UsuarioSchema = mongoose.Schema({
         type:String,
         required:true,
     },
+    tipoUsuario:{
+        type:Number,
+        required:true,
+    },
     creado:{
         type:Date,
         default:Date.now()
