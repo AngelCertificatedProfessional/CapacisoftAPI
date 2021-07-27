@@ -7,5 +7,6 @@ module.exports = function(){
     router.get('/listado',UsuarioController.listadoUsuario)
     router.get('/consultaById/:_id',UsuarioController.getUsuariobyId)
     router.put('/actualizarUsuario',UsuarioController.actualizarUsuario)
+    router.patch('/actualizarContrasena',UsuarioController.actualizarContrasena)
     return router;
 }

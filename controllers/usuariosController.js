@@ -51,10 +51,6 @@ exports.listadoUsuario = async (req,res) => {
             }
         ]    
         )
-        
-        
-        
-        Usuario.find({},{'usuario':1,'nombre':1,'tipoUsuario':1});
         Request.crearRequest('listadoUsuario','',200);
         return res.json({
             message: 'Envio de curso de cursos',
@@ -71,7 +67,7 @@ exports.listadoUsuario = async (req,res) => {
 
 exports.getUsuariobyId = async (req,res) => {
     try{
-        const resultado = await Usuario.findOne({'_id':req.params._id});
+        const resultado = await Usuario.findOne({'_id':req.params._id},{_id:1,usuario:1,contrasena:'',nombre:1,apellido:1,tipoUsuario:1,creado:1});
         Request.crearRequest('getUsuariobyId',JSON.stringify(req.params._id),200);
         return res.json({
             message: 'Envio de universidad',
@@ -94,7 +90,6 @@ exports.actualizarUsuario = async (req,res) => {
         }
         const usuario = await Usuario.findOne({'_id':req.body._id});
         usuario.usuario = req.body.usuario;
-        usuario.contrasena = req.body.contrasena;
         usuario.nombre = req.body.nombre;
         usuario.apellido = req.body.apellido;
         usuario.tipoUsuario = req.body.tipoUsuario;
@@ -107,6 +102,27 @@ exports.actualizarUsuario = async (req,res) => {
     }catch(error){
         console.log(error)
         Request.crearRequest('actualizarUsuario',JSON.stringify(req.body),500,error);
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
+
+
+exports.actualizarContrasena = async (req,res) => {
+    try{
+        const usuario = await Usuario.findOne({'_id':req.body._id});
+        usuario.contrasena = bcrypt.hashSync(usuario.contrasena,bcrypt.genSaltSync(10));
+        const resultado = await usuario.save();
+        Request.crearRequest('actualizarContrasena',JSON.stringify(req.body),200);
+        return res.json({
+            message: 'Envio de temaCurso',
+            data:resultado
+        });
+    }catch(error){
+        console.log(error)
+        Request.crearRequest('actualizarContrasena',JSON.stringify(req.body),500,error);
         res.status(500).json({
             error: 'Algo salio mal',
             data: error
