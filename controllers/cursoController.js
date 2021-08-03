@@ -99,25 +99,26 @@ exports.getCursobyId = async (req,res) => {
     }
 }
 
-// exports.actualizarAlumno = async (req,res) => {
-//     try{
-//         const alumno = await Alumno.findOne({'_id':req.body._id});
-//         alumno.nombreAlumno = req.body.nombreAlumno;
-//         alumno.apellidoAlumno = req.body.apellidoAlumno;
-//         alumno.edad = req.body.edad;
-//         const resultado = await alumno.save();
-//         return res.json({
-//             message: 'Envio de alumnos',
-//             data:resultado
-//         });
-//     }catch(error){
-//         console.log(error)
-//         res.status(500).json({
-//             error: 'Algo salio mal',
-//             data: error
-//         });
-//     }
-// }
+exports.actualizarCurso = async (req,res) => {
+    try{
+        const curso = await Curso.findOne({'_id':req.body._id});
+        curso.nombreCurso = req.body.nombreCurso;
+        curso.proveedor = req.body.proveedor;
+        curso.nombreInstructor = req.body.nombreInstructor;
+        curso.descripcion = req.body.descripcion;
+        const resultado = await curso.save();
+        return res.json({
+            message: 'Envio de cursos',
+            data:resultado
+        });
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
 
 // exports.actualizarInfoAcademico = async (req,res) => {
 //     try{
