@@ -17,12 +17,12 @@ const AlumnoSchema = mongoose.Schema({
         universidadId:{
             type:mongoose.Schema.Types.ObjectId,
             required:true,
-            ref:'universidades'
+            ref:'universidad'
         },
         carrerId:{
             type:mongoose.Schema.Types.ObjectId,
             required:true,
-            ref:'carreras'
+            ref:'carrera'
         },
         semestre:{
             type:Number,
