@@ -7,7 +7,7 @@ module.exports = function(){
     router.get('/listado',CursoController.listadoCursos)
     router.get('/consultaById/:_id',CursoController.getCursobyId)
     router.patch('/actualizarCurso',CursoController.actualizarCurso)
-    // router.patch('/actualizarInfoAcademico',AlumnosController.actualizarInfoAcademico)
+    router.patch('/actualizarDetalleCurso',CursoController.actualizarDetalleCurso)
     // router.patch('/actualizarInfoContacto',AlumnosController.actualizarInfoContacto)
     return router;
 }

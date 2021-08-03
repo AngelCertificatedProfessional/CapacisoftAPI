@@ -120,30 +120,29 @@ exports.actualizarCurso = async (req,res) => {
     }
 }
 
-// exports.actualizarInfoAcademico = async (req,res) => {
-//     try{
-//         const alumno = await Alumno.findOne({'_id':req.body._id});
-//         console.log(req.body)
-//         alumno.infoAcademico.universidadId = req.body.infoAcademico.universidadId;
-//         alumno.infoAcademico.carrerId = req.body.infoAcademico.carrerId;
-//         alumno.infoAcademico.matricula = req.body.infoAcademico.matricula;
-//         alumno.infoAcademico.semestre = req.body.infoAcademico.semestre;
-//         alumno.infoAcademico.cargaAcademica = req.body.infoAcademico.cargaAcademica;
-//         alumno.infoAcademico.estadoAlumno = req.body.infoAcademico.estadoAlumno;
+exports.actualizarDetalleCurso = async (req,res) => {
+    try{
+        const curso = await Curso.findOne({'_id':req.body._id});
+        console.log(req.body)
+        curso.detalleCurso.urlCurso = req.body.detalleCurso.urlCurso;
+        curso.detalleCurso.precio = req.body.detalleCurso.precio;
+        curso.detalleCurso.horas = req.body.detalleCurso.horas;
+        curso.detalleCurso.proveeCertificado = req.body.detalleCurso.proveeCertificado;
+        curso.detalleCurso.herramientas = req.body.detalleCurso.herramientas;
 
-//         const resultado = await alumno.save();
-//         return res.json({
-//             message: 'Envio de alumnos',
-//             data:resultado
-//         });
-//     }catch(error){
-//         console.log(error)
-//         res.status(500).json({
-//             error: 'Algo salio mal',
-//             data: error
-//         });
-//     }
-// }
+        const resultado = await curso.save();
+        return res.json({
+            message: 'Envio de Cursos',
+            data:resultado
+        });
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
 
 // exports.actualizarInfoContacto = async (req,res) => {
 //     try{
