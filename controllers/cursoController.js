@@ -144,24 +144,22 @@ exports.actualizarDetalleCurso = async (req,res) => {
     }
 }
 
-// exports.actualizarInfoContacto = async (req,res) => {
-//     try{
-//         const alumno = await Alumno.findOne({'_id':req.body._id});
-//         console.log(req.body)
-//         alumno.contacto.correo = req.body.contacto.correo;
-//         alumno.contacto.github = req.body.contacto.github;
-//         alumno.contacto.linkedIn = req.body.contacto.linkedIn;
+exports.actualizarTemaCurso = async (req,res) => {
+    try{
+        const curso = await Curso.findOne({'_id':req.body._id});
+        console.log(req.body)
+        curso.temaCurso = req.body.temaCurso;
 
-//         const resultado = await alumno.save();
-//         return res.json({
-//             message: 'Envio de alumnos',
-//             data:resultado
-//         });
-//     }catch(error){
-//         console.log(error)
-//         res.status(500).json({
-//             error: 'Algo salio mal',
-//             data: error
-//         });
-//     }
-// }
+        const resultado = await curso.save();
+        return res.json({
+            message: 'Envio de cursos',
+            data:resultado
+        });
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}

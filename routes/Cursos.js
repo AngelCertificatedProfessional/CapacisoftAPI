@@ -8,6 +8,6 @@ module.exports = function(){
     router.get('/consultaById/:_id',CursoController.getCursobyId)
     router.patch('/actualizarCurso',CursoController.actualizarCurso)
     router.patch('/actualizarDetalleCurso',CursoController.actualizarDetalleCurso)
-    // router.patch('/actualizarInfoContacto',AlumnosController.actualizarInfoContacto)
+    router.patch('/actualizarTemaCurso',CursoController.actualizarTemaCurso)
     return router;
 }
