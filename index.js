@@ -8,6 +8,7 @@ const temaCurso = require('./routes/TemaCurso');
 const usuario = require('./routes/Usuario');
 const alumnos = require('./routes/Alumnos');
 const cursos = require('./routes/Cursos');
+const periodo = require('./routes/Periodo');
 //Crear la conexion a la BD
 const conectarDB = require('./config/db');
 
@@ -24,6 +25,7 @@ app.use('/api/temaCurso',temaCurso());
 app.use('/api/usuario',usuario());
 app.use('/api/alumno',alumnos());
 app.use('/api/curso',cursos());
+app.use('/api/periodo',periodo());
 
 //ruta para el home
 app.listen(3000,function(){
