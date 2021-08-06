@@ -139,3 +139,27 @@ const validaUsuario = async (usuario,nId) => {
     }
 
 }
+
+
+exports.iniciarSecion = async(req,res) => {
+    try{
+        const usuario = await Usuario.findOne({'usuario':req.body.usuario},{usuario:1,contrasena:1,_id:1});
+        if(!usuario) {
+            throw 'El usuario es incorrecto';
+        }
+        if(bcrypt.compareSync(req.body.contrasena, usuario.contrasena)){
+            return res.json({
+                message: 'Envio de iniciar sesion',
+                data:Buffer.from(JSON.stringify(usuario)).toString('base64')
+            });
+        }else{
+            throw 'El usuario o la contrasena son incorrectas';    
+        }
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
