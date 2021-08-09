@@ -1,8 +1,12 @@
 const TemaCurso = require('../models/TemaCurso')
 const Request = require('./requestController')
+const Usuarios = require('./usuariosController')
 
 exports.createTemaCurso =  async (req,res) =>{
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const temaCurso = new TemaCurso(req.body)
         const resultado = await temaCurso.save();
         Request.crearRequest('createTemaCurso',JSON.stringify(req.body),200);
@@ -21,6 +25,9 @@ exports.createTemaCurso =  async (req,res) =>{
 
 exports.listadoTemaCurso = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await TemaCurso.find({},{'temaCurso':1});
         Request.crearRequest('listadoTemaCurso','',200);
         return res.json({
@@ -38,6 +45,9 @@ exports.listadoTemaCurso = async (req,res) => {
 
 exports.getTemaCursobyId = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await TemaCurso.findOne({'_id':req.params._id});
         Request.crearRequest('getTemaCursobyId',JSON.stringify(req.body),200);
         return res.json({
@@ -55,6 +65,9 @@ exports.getTemaCursobyId = async (req,res) => {
 
 exports.actualizarTemaCurso = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const temaCurso = await TemaCurso.findOne({'_id':req.body._id});
         temaCurso.temaCurso = req.body.temaCurso;
         const resultado = await temaCurso.save();

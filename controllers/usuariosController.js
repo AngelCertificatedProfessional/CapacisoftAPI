@@ -4,10 +4,12 @@ const bcrypt = require('bcrypt-nodejs')
 
 exports.createUsuario =  async (req,res) =>{
     try{
+        if(!await validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         if((await validaUsuario(req.body.usuario)) > 0) {
             throw 'El usuario ya existe'
         }
-
         const usuario = new Usuario(req.body)
         //Hasheamos el password
         usuario.contrasena = bcrypt.hashSync(usuario.contrasena,bcrypt.genSaltSync(10));
@@ -30,6 +32,9 @@ exports.createUsuario =  async (req,res) =>{
 
 exports.listadoUsuario = async (req,res) => {
     try{
+        if(!await validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Usuario.aggregate([
             {
                 $lookup:
@@ -67,6 +72,9 @@ exports.listadoUsuario = async (req,res) => {
 
 exports.getUsuariobyId = async (req,res) => {
     try{
+        if(!await validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Usuario.findOne({'_id':req.params._id},{_id:1,usuario:1,contrasena:'',nombre:1,apellido:1,tipoUsuario:1,creado:1});
         Request.crearRequest('getUsuariobyId',JSON.stringify(req.params._id),200);
         return res.json({
@@ -84,7 +92,9 @@ exports.getUsuariobyId = async (req,res) => {
 
 exports.actualizarUsuario = async (req,res) => {
     try{
-
+        if(!await validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         if((await validaUsuario(req.body.usuario,req.body._id)) > 0) {
             throw 'El usuario ya existe'
         }
@@ -112,6 +122,9 @@ exports.actualizarUsuario = async (req,res) => {
 
 exports.actualizarContrasena = async (req,res) => {
     try{
+        if(!await validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const usuario = await Usuario.findOne({'_id':req.body._id});
         usuario.contrasena = bcrypt.hashSync(usuario.contrasena,bcrypt.genSaltSync(10));
         const resultado = await usuario.save();
@@ -131,7 +144,6 @@ exports.actualizarContrasena = async (req,res) => {
 }
 
 const validaUsuario = async (usuario,nId) => {
-
     if(nId === undefined){
         return (await Usuario.countDocuments({'usuario':usuario}));
     }else{
@@ -143,23 +155,39 @@ const validaUsuario = async (usuario,nId) => {
 
 exports.iniciarSecion = async(req,res) => {
     try{
-        const usuario = await Usuario.findOne({'usuario':req.body.usuario},{usuario:1,contrasena:1,_id:1});
+        let usuario = await Usuario.findOne({'usuario':req.body.usuario},{usuario:1,contrasena:1,_id:1});
+        usuario = JSON.parse(JSON.stringify(usuario));
+        usuario.token = Buffer.from(usuario._id.toString()).toString('base64');
         if(!usuario) {
             throw 'El usuario es incorrecto';
         }
-        if(bcrypt.compareSync(req.body.contrasena, usuario.contrasena)){
-            return res.json({
-                message: 'Envio de iniciar sesion',
-                data:Buffer.from(JSON.stringify(usuario)).toString('base64')
-            });
-        }else{
+        if(!bcrypt.compareSync(req.body.contrasena, usuario.contrasena)){
             throw 'El usuario o la contrasena son incorrectas';    
         }
+        delete usuario["contrasena"];
+        delete usuario["_id"];
+        return res.json({
+            message: 'Envio de iniciar sesion',
+            data:usuario
+        });
     }catch(error){
         console.log(error)
         res.status(500).json({
             error: 'Algo salio mal',
             data: error
         });
+    }
+}
+
+const validaSesionUsuario = exports.validaSesionUsuario = async(_id) =>{
+    try{
+        const _idUsuario = Buffer.from(_id, 'base64').toString('ascii');
+        const usuario = await Usuario.findOne({_id:_idUsuario});
+        if(!usuario) {
+            return false;
+        }
+        return true;
+    }catch(error){
+        return false;
     }
 }

@@ -1,8 +1,12 @@
 const Periodo = require('../models/Periodo')
 const Request = require('./requestController')
+const Usuarios = require('./usuariosController')
 
 exports.createPeriodo =  async (req,res) =>{
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const periodo = new Periodo(req.body)
         const resultado = await periodo.save();
         Request.crearRequest('createPeriodo',JSON.stringify(req.body),200);
@@ -21,6 +25,9 @@ exports.createPeriodo =  async (req,res) =>{
 
 exports.listadoPeriodo= async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Periodo.find({},{'periodo':1});
         Request.crearRequest('listadoPeriodo','',200);
         return res.json({
@@ -38,6 +45,9 @@ exports.listadoPeriodo= async (req,res) => {
 
 exports.getPeriodobyId = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Periodo.findOne({'_id':req.params._id});
         Request.crearRequest('getPeriodobyId',JSON.stringify(req.body),200);
         return res.json({
@@ -55,6 +65,9 @@ exports.getPeriodobyId = async (req,res) => {
 
 exports.actualizarPeriodo = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const periodo = await Periodo.findOne({'_id':req.body._id});
         periodo.periodo = req.body.periodo;
         periodo.fechaInicio = req.body.fechaInicio;

@@ -1,9 +1,13 @@
 const Alumno = require('../models/Alumno')
 const mongoose = require('mongoose')
 const Request = require('./requestController')
+const Usuarios = require('./usuariosController')
 
 exports.createAlumno =  async (req,res) =>{
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const alumnos = new Alumno(req.body)
         const resultado = await alumnos.save();
         Request.crearRequest('createAlumnos',JSON.stringify(req.body),200);
@@ -22,6 +26,9 @@ exports.createAlumno =  async (req,res) =>{
 
 exports.listadoAlunnos = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Alumno.aggregate([
             {
                 $project:{
@@ -46,6 +53,9 @@ exports.listadoAlunnos = async (req,res) => {
 
 exports.getAlunnosbyId = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Alumno.aggregate([
             {
                 $match:{
@@ -124,6 +134,9 @@ exports.getAlunnosbyId = async (req,res) => {
 
 exports.actualizarAlumno = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const alumno = await Alumno.findOne({'_id':req.body._id});
         alumno.nombreAlumno = req.body.nombreAlumno;
         alumno.apellidoAlumno = req.body.apellidoAlumno;
@@ -144,8 +157,10 @@ exports.actualizarAlumno = async (req,res) => {
 
 exports.actualizarInfoAcademico = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const alumno = await Alumno.findOne({'_id':req.body._id});
-        console.log(req.body)
         alumno.infoAcademico.universidadId = req.body.infoAcademico.universidadId;
         alumno.infoAcademico.carrerId = req.body.infoAcademico.carrerId;
         alumno.infoAcademico.matricula = req.body.infoAcademico.matricula;
@@ -169,8 +184,10 @@ exports.actualizarInfoAcademico = async (req,res) => {
 
 exports.actualizarInfoContacto = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const alumno = await Alumno.findOne({'_id':req.body._id});
-        console.log(req.body)
         alumno.contacto.correo = req.body.contacto.correo;
         alumno.contacto.github = req.body.contacto.github;
         alumno.contacto.linkedIn = req.body.contacto.linkedIn;

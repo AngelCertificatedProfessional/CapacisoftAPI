@@ -1,6 +1,10 @@
 const Universidad = require('../models/Universidad')
+const Usuarios = require('./usuariosController')
 
 exports.createUniversidad =  async (req,res) =>{
+    if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+        throw "El usuario no tiene derecho a utilizar este metodo"
+    }
     try{
         const universidad = new Universidad(req.body)
         const resultado = await universidad.save();
@@ -19,6 +23,9 @@ exports.createUniversidad =  async (req,res) =>{
 
 exports.listadoUniversidades = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Universidad.find({},{'nombre':1,'abreviacion':1});
         return res.json({
             message: 'Envio de universidades',
@@ -35,6 +42,9 @@ exports.listadoUniversidades = async (req,res) => {
 
 exports.getUniversidadbyId = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Universidad.findOne({'_id':req.params._id});
         return res.json({
             message: 'Envio de universidad',
@@ -51,6 +61,9 @@ exports.getUniversidadbyId = async (req,res) => {
 
 exports.actualizarUniversidad = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const universidad = await Universidad.findOne({'_id':req.body._id});
         universidad.nombre = req.body.nombre;
         universidad.abreviacion = req.body.abreviacion;

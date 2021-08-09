@@ -1,9 +1,13 @@
 const Curso = require('../models/Curso')
 const mongoose = require('mongoose')
 const Request = require('./requestController')
+const Usuarios = require('./usuariosController')
 
 exports.createCurso =  async (req,res) =>{
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const curso = new Curso(req.body)
         const resultado = await curso.save();
         Request.crearRequest('createCurso',JSON.stringify(req.body),200);
@@ -22,6 +26,9 @@ exports.createCurso =  async (req,res) =>{
 
 exports.listadoCursos = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Curso.aggregate([
             {
                 $project:{
@@ -54,6 +61,9 @@ exports.listadoCursos = async (req,res) => {
 
 exports.getCursobyId = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const resultado = await Curso.aggregate([
             {
                 $match:{
@@ -101,6 +111,9 @@ exports.getCursobyId = async (req,res) => {
 
 exports.actualizarCurso = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const curso = await Curso.findOne({'_id':req.body._id});
         curso.nombreCurso = req.body.nombreCurso;
         curso.proveedor = req.body.proveedor;
@@ -122,6 +135,9 @@ exports.actualizarCurso = async (req,res) => {
 
 exports.actualizarDetalleCurso = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const curso = await Curso.findOne({'_id':req.body._id});
         console.log(req.body)
         curso.detalleCurso.urlCurso = req.body.detalleCurso.urlCurso;
@@ -146,6 +162,9 @@ exports.actualizarDetalleCurso = async (req,res) => {
 
 exports.actualizarTemaCurso = async (req,res) => {
     try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
         const curso = await Curso.findOne({'_id':req.body._id});
         console.log(req.body)
         curso.temaCurso = req.body.temaCurso;
