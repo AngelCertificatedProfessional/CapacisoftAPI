@@ -1,4 +1,5 @@
 const express = require('express');
+const config = require('./config/config')
 //crear una app de express
 const app = express();
 
@@ -28,7 +29,7 @@ app.use('/api/curso',cursos());
 app.use('/api/periodo',periodo());
 
 //ruta para el home
-app.listen(3000,err => {
+app.listen(config.config.port,err => {
     if (err) {
       console.error("Error: ", err);
       return;
