@@ -12,8 +12,6 @@ branches:
   - main
   only:
   - publicacion
-before_script:
-  - yarn run env
 script:
   - yarn start
 notification:
@@ -22,8 +20,6 @@ notification:
       - angel.espinozatorres213@gmail.com
     on_success: always
     on_failure: always
-install:
-  - npm install
 deploy:
   provider: heroku
   skip-cleanup: true
