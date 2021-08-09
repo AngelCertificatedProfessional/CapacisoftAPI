@@ -34,4 +34,4 @@ deploy:
   on:
     repo: AngelCertificatedProfessional/CapacisoftAPI
 env:
-  - DB_MONGO=test
+  - DB_MONGO=$DB_MONGO
