@@ -33,3 +33,5 @@ deploy:
   #en este segmento indicamos donde esta alojado el proyecto
   on:
     repo: AngelCertificatedProfessional/CapacisoftAPI
+env:
+  - DB_MONGO=test
