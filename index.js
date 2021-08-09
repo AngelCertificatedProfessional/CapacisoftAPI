@@ -28,7 +28,11 @@ app.use('/api/curso',cursos());
 app.use('/api/periodo',periodo());
 
 //ruta para el home
-app.listen(3000,function(){
+app.listen(3000,err => {
+    if (err) {
+      console.error("Error: ", err);
+      return;
+    }
     console.log(`Listening http://localhost:3000`);
 });
 
