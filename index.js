@@ -34,6 +34,6 @@ app.listen(config.config.port,err => {
       console.error("Error: ", err);
       return;
     }
-    console.log(`Listening http://localhost:3000`);
+    console.log(`Listening http://localhost:${config.config.port}`);
 });
 
