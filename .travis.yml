@@ -12,6 +12,8 @@ branches:
   - main
   only:
   - publicacion
+before_script:
+  - yarn run env
 script:
   - yarn start
 notification:
