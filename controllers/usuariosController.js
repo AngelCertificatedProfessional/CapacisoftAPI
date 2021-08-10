@@ -156,11 +156,11 @@ const validaUsuario = async (usuario,nId) => {
 exports.iniciarSecion = async(req,res) => {
     try{
         let usuario = await Usuario.findOne({'usuario':req.body.usuario},{usuario:1,contrasena:1,_id:1});
-        usuario = JSON.parse(JSON.stringify(usuario));
-        usuario.token = Buffer.from(usuario._id.toString()).toString('base64');
         if(!usuario) {
             throw 'El usuario es incorrecto';
         }
+        usuario = JSON.parse(JSON.stringify(usuario));
+        usuario.token = Buffer.from(usuario._id.toString()).toString('base64');
         if(!bcrypt.compareSync(req.body.contrasena, usuario.contrasena)){
             throw 'El usuario o la contrasena son incorrectas';    
         }
