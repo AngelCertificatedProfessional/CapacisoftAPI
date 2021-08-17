@@ -88,3 +88,24 @@ exports.actualizarPeriodo = async (req,res) => {
         });
     }
 }
+
+exports.listadoAlumnosByPeriodo= async (req,res) => {
+    try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
+        const resultado = await Periodo.findOne({'_id':req.params._id});
+        // const resultado = await Periodo.find({},{'periodo':1});
+        Request.crearRequest('listadoPeriodo','',200);
+        return res.json({
+            message: 'Envio de periodos',
+            data:resultado.alumnos
+        });
+    }catch(error){
+        Request.crearRequest('listadoPeriodo','',500,error);
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
