@@ -124,7 +124,7 @@ exports.getProgramarCursobyId = async (req,res) => {
                     precioFinal:1,
                     alumnos:1,
                     creado:1,
-                    tipoCurso: {
+                    tipoCursoDes: {
                         $switch: {
                             branches: [
                                 { case: {$eq: ['$tipoCurso', 1]}, then: 'Teorico' },
@@ -154,28 +154,30 @@ exports.getProgramarCursobyId = async (req,res) => {
     }
 }
 
-// exports.actualizarPeriodo = async (req,res) => {
-//     try{
-//         if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
-//             throw "El usuario no tiene derecho a utilizar este metodo"
-//         }
-//         const periodo = await Periodo.findOne({'_id':req.body._id});
-//         periodo.periodo = req.body.periodo;
-//         periodo.fechaInicio = req.body.fechaInicio;
-//         periodo.fechaFinal = req.body.fechaFinal;
-//         periodo.alumnos = req.body.alumnos;
-//         const resultado = await periodo.save();
-//         Request.crearRequest('actualizarPeriodo',JSON.stringify(req.body),200);
-//         return res.json({
-//             message: 'Envio de periodo',
-//             data:resultado
-//         });
-//     }catch(error){
-//         console.log(error)
-//         Request.crearRequest('actualizarPeriodo',JSON.stringify(req.body),500,error);
-//         res.status(500).json({
-//             error: 'Algo salio mal',
-//             data: error
-//         });
-//     }
-// }
+exports.actualizarProgramarCurso = async (req,res) => {
+    try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
+        const programarCurso = await ProgramarCurso.findOne({'_id':req.body._id});
+        programarCurso.alumnos = req.body.alumnos;
+        programarCurso.cursoId = req.body.cursoId;
+        programarCurso.fechaInicioCurso = req.body.fechaInicioCurso;
+        programarCurso.periodoId = req.body.periodoId;
+        programarCurso.tipoCurso = req.body.tipoCurso;
+        programarCurso.precioFinal = req.body.precioFinal;
+        const resultado = await programarCurso.save();
+        Request.crearRequest('actualizarProgramarCurso',JSON.stringify(req.body),200);
+        return res.json({
+            message: 'Envio de periodo',
+            data:resultado
+        });
+    }catch(error){
+        console.log(error)
+        Request.crearRequest('actualizarProgramarCurso',JSON.stringify(req.body),500,error);
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
