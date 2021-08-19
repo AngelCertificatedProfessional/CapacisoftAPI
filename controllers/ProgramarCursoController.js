@@ -181,3 +181,40 @@ exports.actualizarProgramarCurso = async (req,res) => {
         });
     }
 }
+
+exports.getAlumnoByProgramarCurso = async (req,res) => {
+    try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
+        const resultado = await ProgramarCurso.aggregate([
+            {
+                $unwind : "$alumnos"
+            },
+            {
+                $match:{
+                    '_id':new mongoose.Types.ObjectId(req.params._id),
+                    "alumnos._id": req.params._idAlumno
+                }
+            },
+            {
+                $project:{
+                    _id:1,
+                    alumnos:1
+                }
+            }
+        ]    
+        )
+        Request.crearRequest('getAlumnoByProgramarCurso',JSON.stringify(req.body),200);
+        return res.json({
+            message: 'Envio de curso programado',
+            data:resultado[0]
+        });
+    }catch(error){
+        Request.crearRequest('getAlumnoByProgramarCurso',JSON.stringify(req.body),500,error);
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}

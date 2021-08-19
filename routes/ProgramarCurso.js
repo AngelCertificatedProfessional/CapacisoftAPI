@@ -6,6 +6,7 @@ module.exports = function(){
     router.post('/createProgramarCurso',ProgramarCursoController.createProgramarCurso)
     router.get('/listado',ProgramarCursoController.listadoProgramarCurso)
     router.get('/consultaById/:_id',ProgramarCursoController.getProgramarCursobyId)
-    router.patch('/actualizarProgramarCurso',ProgramarCursoController.actualizarProgramarCurso)
+    router.get('/getAlumnoByProgramarCurso/:_id/:_idAlumno',ProgramarCursoController.getAlumnoByProgramarCurso)
+    router.put('/actualizarProgramarCurso',ProgramarCursoController.actualizarProgramarCurso)
     return router;
 }
