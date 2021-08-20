@@ -122,7 +122,11 @@ exports.getProgramarCursobyId = async (req,res) => {
                     periodoId:1,
                     tipoCurso:1,
                     precioFinal:1,
-                    alumnos:1,
+                    alumnos:{
+                        _id:1,
+                        matricula:1,
+                        nombreCompletoAlumno:1
+                    },
                     creado:1,
                     tipoCursoDes: {
                         $switch: {
