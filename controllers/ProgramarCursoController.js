@@ -125,7 +125,10 @@ exports.getProgramarCursobyId = async (req,res) => {
                     alumnos:{
                         _id:1,
                         matricula:1,
-                        nombreCompletoAlumno:1
+                        nombreCompletoAlumno:1,
+                        fechaFinalizaCurso:1,
+                        calificacionCurso:1,
+                        notasCurso: 1 
                     },
                     creado:1,
                     tipoCursoDes: {
@@ -198,7 +201,7 @@ exports.getAlumnoByProgramarCurso = async (req,res) => {
             {
                 $match:{
                     '_id':new mongoose.Types.ObjectId(req.params._id),
-                    "alumnos._id": req.params._idAlumno
+                    "alumnos._id": new mongoose.Types.ObjectId(req.params._idAlumno) 
                 }
             },
             {
@@ -216,6 +219,37 @@ exports.getAlumnoByProgramarCurso = async (req,res) => {
         });
     }catch(error){
         Request.crearRequest('getAlumnoByProgramarCurso',JSON.stringify(req.body),500,error);
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
+
+
+exports.actualizarProgramarCursoAlumno = async (req,res) => {
+    try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
+
+        const resultado = await ProgramarCurso.updateMany(
+            { _id: req.body._idProgramarCurso, "alumnos._id": req.body._id },
+            { $set: {
+                    "alumnos.$.fechaFinalizaCurso" : req.body.fechaFinalizaCurso,
+                    "alumnos.$.calificacionCurso" : req.body.calificacionCurso,
+                    "alumnos.$.notasCurso" : req.body.notasCurso 
+                } 
+            }
+        );
+        Request.crearRequest('actualizarProgramarCursoAlumno',JSON.stringify(req.body),200);
+        return res.json({
+            message: 'Envio de programarCurso',
+            data:resultado
+        });
+    }catch(error){
+        console.log(error)
+        Request.crearRequest('actualizarProgramarCursoAlumno',JSON.stringify(req.body),500,error);
         res.status(500).json({
             error: 'Algo salio mal',
             data: error
