@@ -23,7 +23,7 @@ const UsuarioSchema = mongoose.Schema({
     },
     creado:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     }
 })
 

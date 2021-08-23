@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const CarrerasSchema = mongoose.Schema({
     nombreCarrera:{
@@ -19,7 +19,7 @@ const CarrerasSchema = mongoose.Schema({
     },
     creado:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     }
 })
 

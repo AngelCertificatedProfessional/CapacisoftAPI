@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const CursoSchema = mongoose.Schema({
     nombreCurso:{
@@ -43,7 +43,7 @@ const CursoSchema = mongoose.Schema({
     },
     creado:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     }
 })
 

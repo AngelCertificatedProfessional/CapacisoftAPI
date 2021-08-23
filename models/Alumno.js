@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const AlumnoSchema = mongoose.Schema({
     nombreAlumno:{
@@ -54,7 +54,7 @@ const AlumnoSchema = mongoose.Schema({
         }
     },creado:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     }
 })
 

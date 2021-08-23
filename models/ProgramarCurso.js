@@ -49,7 +49,7 @@ const ProgramarCursoSchema = mongoose.Schema({
     alumnos:[AlumnoSchema],
     creado:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     }
 })
 
