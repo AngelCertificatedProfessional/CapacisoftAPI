@@ -11,6 +11,7 @@ const alumnos = require('./routes/Alumnos');
 const cursos = require('./routes/Cursos');
 const periodo = require('./routes/Periodo');
 const programarCurso = require('./routes/ProgramarCurso');
+const actualizacion = require('./routes/Actualizacion');
 //Crear la conexion a la BD
 const conectarDB = require('./config/db');
 
@@ -29,6 +30,7 @@ app.use('/api/alumno',alumnos());
 app.use('/api/curso',cursos());
 app.use('/api/periodo',periodo());
 app.use('/api/programarCurso',programarCurso());
+app.use('/api/actualizacion',actualizacion());
 
 //ruta para el home
 app.listen(config.config.port,err => {
