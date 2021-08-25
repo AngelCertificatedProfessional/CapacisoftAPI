@@ -155,7 +155,7 @@ const validaUsuario = async (usuario,nId) => {
 
 exports.iniciarSecion = async(req,res) => {
     try{
-        let usuario = await Usuario.findOne({'usuario':req.body.usuario},{usuario:1,contrasena:1,_id:1});
+        let usuario = await Usuario.findOne({'usuario':req.body.usuario},{usuario:1,contrasena:1,_id:1,tipoUsuario:1});
         if(!usuario) {
             throw 'El usuario es incorrecto';
         }
@@ -168,7 +168,7 @@ exports.iniciarSecion = async(req,res) => {
         delete usuario["_id"];
         return res.json({
             message: 'Envio de iniciar sesion',
-            data:usuario
+            data:Buffer.from(JSON.stringify(usuario)).toString('base64')
         });
     }catch(error){
         console.log(error)
