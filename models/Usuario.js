@@ -24,6 +24,11 @@ const UsuarioSchema = mongoose.Schema({
     creado:{
         type:Date,
         default:Date.now
+    },
+    creadoPor:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'usuarios'
     }
 })
 

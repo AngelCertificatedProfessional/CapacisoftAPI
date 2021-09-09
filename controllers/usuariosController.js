@@ -1,5 +1,6 @@
 const Usuario = require('../models/Usuario')
 const Request = require('./requestController')
+const mongoose = require('mongoose')
 const bcrypt = require('bcrypt-nodejs')
 
 exports.createUsuario =  async (req,res) =>{
@@ -13,6 +14,8 @@ exports.createUsuario =  async (req,res) =>{
         const usuario = new Usuario(req.body)
         //Hasheamos el password
         usuario.contrasena = bcrypt.hashSync(usuario.contrasena,bcrypt.genSaltSync(10));
+        usuario.creadoPor =Buffer.from(req.headers.authorization, 'base64').toString('ascii');
+        
         const resultado = await usuario.save();
 
         Request.crearRequest('createUsuario',JSON.stringify(req.body),200);
@@ -54,7 +57,7 @@ exports.listadoUsuario = async (req,res) => {
                     tipoUsuario:"$tipoUsuarios.tipoUsuario"
                 }
             }
-        ]    
+        ]
         )
         Request.crearRequest('listadoUsuario','',200);
         return res.json({
@@ -63,6 +66,59 @@ exports.listadoUsuario = async (req,res) => {
         });
     }catch(error){
         Request.crearRequest('listadoUsuario','',500,error);
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
+
+
+exports.listadoUsuarioById = async (req,res) => {
+    try{
+        if(!await validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
+        const _idUsuario = Buffer.from(req.headers.authorization, 'base64').toString('ascii');
+        const resultado = await Usuario.aggregate([
+            {
+                $match:{
+                    $or:[{
+                            "_id":new mongoose.Types.ObjectId(_idUsuario)
+                        },{
+                            "creadoPor":new mongoose.Types.ObjectId(_idUsuario)
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup:
+                    {
+                    from: "tipoUsuario",
+                    localField: "tipoUsuario",
+                    foreignField: "codigo",
+                    as: "tipoUsuarios"
+                    }
+            },
+            {
+                $unwind:'$tipoUsuarios'
+            }
+            ,{
+                $project:{
+                    usuario:1,
+                    tipoUsuario:"$tipoUsuarios.tipoUsuario"
+                }
+            }
+        ]
+        )
+        console.log(resultado);
+        Request.crearRequest('listadoUsuarioById','',200);
+        return res.json({
+            message: 'Envio de curso de cursos',
+            data:resultado
+        });
+    }catch(error){
+        Request.crearRequest('listadoUsuarioById','',500,error);
         res.status(500).json({
             error: 'Algo salio mal',
             data: error
