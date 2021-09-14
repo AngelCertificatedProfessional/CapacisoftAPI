@@ -162,7 +162,7 @@ exports.actualizarUsuario = async (req,res) => {
         const resultado = await usuario.save();
         Request.crearRequest('actualizarUsuario',JSON.stringify(req.body),200);
         return res.json({
-            message: 'Envio de temaCurso',
+            message: 'Envio de usuario',
             data:resultado
         });
     }catch(error){

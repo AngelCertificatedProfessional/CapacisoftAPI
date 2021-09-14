@@ -27,7 +27,6 @@ const UsuarioSchema = mongoose.Schema({
     },
     creadoPor:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true,
         ref:'usuarios'
     }
 })

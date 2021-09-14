@@ -1,5 +1,25 @@
 const mongoose = require('mongoose')
 
+const AlumnoSchema = mongoose.Schema({
+    _id:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'alumno'
+    },
+    matricula:{
+        type:String,
+    },
+    nombreCompletoAlumno:{
+        type:String,
+    },
+    alumnoBaja:{
+        type:Boolean,
+    },
+    fechaBaja:{
+        type:Date,
+    }
+})
+
 const PeriodoSchema = mongoose.Schema({
     periodo:{
         type:String,
@@ -13,10 +33,7 @@ const PeriodoSchema = mongoose.Schema({
         type:Date,
         required:true
     },
-    alumnos:{
-        type : Array ,
-        "default" : [] 
-    },
+    alumnos:[AlumnoSchema],
     creado:{
         type:Date,
         default:Date.now
