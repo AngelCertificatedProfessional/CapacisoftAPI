@@ -109,3 +109,53 @@ exports.listadoAlumnosByPeriodo= async (req,res) => {
         });
     }
 }
+
+exports.listadoBajasByPeriodo= async (req,res) => {
+    try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
+
+        const resultado = await Periodo.aggregate([
+                { 
+                    "$unwind": "$alumnos" 
+                },
+                {
+                    '$match':{
+                        'alumnos.alumnoBaja':true
+                    }
+                },
+                {
+                    '$project':{
+                        'alumnos':1
+                    }
+                },
+                {
+                    '$group': {
+                        _id: {
+                            '$month': '$alumnos.fechaBaja'
+                        }, 
+                        'alumnos': {
+                            '$sum': 1
+                        } 
+                    }
+                },
+                {
+                    '$sort':{
+                        _id:1
+                     }
+                }
+            ])
+        Request.crearRequest('listadoBajasByPeriodo','',200);
+        return res.json({
+            message: 'Envio de periodos',
+            data:resultado
+        });
+    }catch(error){
+        Request.crearRequest('listadoBajasByPeriodo','',500,error);
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}

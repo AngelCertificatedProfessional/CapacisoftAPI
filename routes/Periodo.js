@@ -8,5 +8,6 @@ module.exports = function(){
     router.get('/consultaById/:_id',PeriodoController.getPeriodobyId)
     router.put('/actualizarPeriodo',PeriodoController.actualizarPeriodo)
     router.get('/listadoAlumnosByPeriodo/:_id',PeriodoController.listadoAlumnosByPeriodo)
+    router.get('/listadoBajasByPeriodo',PeriodoController.listadoBajasByPeriodo)
     return router;
 }
