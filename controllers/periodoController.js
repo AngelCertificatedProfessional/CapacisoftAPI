@@ -1,6 +1,7 @@
 const Periodo = require('../models/Periodo')
 const Request = require('./requestController')
 const Usuarios = require('./usuariosController')
+const mongoose = require('mongoose')
 
 exports.createPeriodo =  async (req,res) =>{
     try{
@@ -115,8 +116,12 @@ exports.listadoBajasByPeriodo= async (req,res) => {
         if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
             throw "El usuario no tiene derecho a utilizar este metodo"
         }
-
         const resultado = await Periodo.aggregate([
+                {    
+                    '$match':{
+                        '_id':new mongoose.Types.ObjectId(req.params._id)
+                    }
+                },
                 { 
                     "$unwind": "$alumnos" 
                 },
