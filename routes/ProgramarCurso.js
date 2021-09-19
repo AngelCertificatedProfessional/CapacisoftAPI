@@ -9,5 +9,6 @@ module.exports = function(){
     router.get('/getAlumnoByProgramarCurso/:_id/:_idAlumno',ProgramarCursoController.getAlumnoByProgramarCurso)
     router.put('/actualizarProgramarCurso',ProgramarCursoController.actualizarProgramarCurso)
     router.patch('/actualizarProgramarCursoAlumno',ProgramarCursoController.actualizarProgramarCursoAlumno)
+    router.get('/listadoGastosByPeriodo/:_id',ProgramarCursoController.listadoGastosByPeriodo)
     return router;
 }

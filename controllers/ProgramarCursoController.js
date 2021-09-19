@@ -256,3 +256,56 @@ exports.actualizarProgramarCursoAlumno = async (req,res) => {
         });
     }
 }
+
+
+
+exports.listadoGastosByPeriodo= async (req,res) => {
+    try{
+        if(!await Usuarios.validaSesionUsuario(req.headers.authorization)){
+            throw "El usuario no tiene derecho a utilizar este metodo"
+        }
+        const resultado = await ProgramarCurso.aggregate([
+                {    
+                    '$match':{
+                        'periodoId':new mongoose.Types.ObjectId(req.params._id)
+                    }
+                },
+                {
+                    '$project':{
+                        '_id':1,
+                        'fechaInicioCurso':1,
+                        'precioFinal':1,
+                        'tamanoArregloAlumnos':{'$size':'$alumnos'},
+                        'total': { $multiply: [ "$precioFinal", {'$size':'$alumnos'} ] }
+                    }
+                }
+                ,
+                {
+                    '$group': {
+                        _id: {
+                            '$month': '$fechaInicioCurso'
+                        }, 
+                        'total': {
+                            '$sum': '$total'
+                        } 
+                    }
+                },
+                {
+                    '$sort':{
+                        _id:1
+                     }
+                }
+            ])
+        Request.crearRequest('listadoGastosByPeriodo','',200);
+        return res.json({
+            message: 'Envio de periodos',
+            data:resultado
+        });
+    }catch(error){
+        Request.crearRequest('listadoGastosByPeriodo','',500,error);
+        res.status(500).json({
+            error: 'Algo salio mal',
+            data: error
+        });
+    }
+}
